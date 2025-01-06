@@ -14,14 +14,9 @@ env:
   RUST_BACKTRACE: 1
 
 jobs:
-  test:
+  build:
     name: ${{ matrix.platform.os-name }} with rust ${{ matrix.toolchain }}
     runs-on: ${{ matrix.platform.runs-on }}
-
-    permissions:
-      contents: write
-      id-token: write
-      attestations: write
 
     strategy:
       fail-fast: false
@@ -161,16 +156,41 @@ jobs:
             target/${{ matrix.platform.target }}/release/${{ matrix.platform.bin }}
             target/release/${{ matrix.platform.bin }}
 
-      - name: Publish GitHub release
-        uses: softprops/action-gh-release@v2
-        if: github.ref_type == 'tag'
-        with:
-          make_latest: true
-          draft: false
-
       - name: Publish artifacts and release
         uses: houseabsolute/actions-rust-release@v0
         with:
           executable-name: trash
           target: ${{ matrix.platform.target }}
-        if: matrix.toolchain == 'stable'
+          release-tag-prefix: "not-set-release-is-created-below"
+
+  create_release:
+    name: Release
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+    needs:
+      - build
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - name: Check artifacts
+        run: ls -la .
+      - name: Generate artifact attestation
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: '*'
+      - name: Publish
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          files: |
+            *.tar.gz
+            *.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
