@@ -2,6 +2,7 @@ use clap::Parser;
 use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
 struct Args {
     #[arg(required=true, num_args=1..)]
     paths: Vec<PathBuf>,
