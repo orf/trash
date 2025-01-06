@@ -148,20 +148,13 @@ jobs:
           cross-version: 4090beca3cfffa44371a5bba524de3a578aa46c3
         if: ${{ !matrix.platform.skip-tests }}
 
-      - name: Generate artifact attestation
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: |
-            target/${{ matrix.platform.target }}/release/${{ matrix.platform.bin }}
-            target/release/${{ matrix.platform.bin }}
-
       - name: Publish artifacts and release
         uses: houseabsolute/actions-rust-release@v0
         with:
           executable-name: trash
           target: ${{ matrix.platform.target }}
           release-tag-prefix: "not-set-release-is-created-below"
+        if: matrix.toolchain == 'stable'
 
   create_release:
     name: Release
