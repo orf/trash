@@ -356,7 +356,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "trash-cli"
+name = "trash-rs-cli"
 version = "0.2.0"
 dependencies = [
  "anyhow",
