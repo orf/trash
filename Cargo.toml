@@ -2,6 +2,9 @@
 name = "trash-cli"
 version = "0.1.0"
 edition = "2021"
+description = "A small CLI tool to move files to the trash"
+license = "MIT"
+repository = "https://github.com/orf/trash-cli"
 
 [[bin]]
 name = "trash"
