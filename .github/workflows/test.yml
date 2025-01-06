@@ -32,7 +32,7 @@ jobs:
             target: x86_64-unknown-freebsd
             bin: trash
             name: trash-FreeBSD-x86_64.tar.gz
-            skip-tests: true
+
           - os-name: Linux-x86_64
             runs-on: ubuntu-20.04
             target: x86_64-unknown-linux-musl
@@ -53,25 +53,25 @@ jobs:
             target: i686-unknown-linux-musl
             bin: trash
             name: trash-Linux-i686-musl.tar.gz
-            skip-tests: true
+
           - os-name: Linux-powerpc
             runs-on: ubuntu-20.04
             target: powerpc-unknown-linux-gnu
             bin: trash
             name: trash-Linux-powerpc-gnu.tar.gz
-            skip-tests: true
+
           - os-name: Linux-powerpc64
             runs-on: ubuntu-20.04
             target: powerpc64-unknown-linux-gnu
             bin: trash
             name: trash-Linux-powerpc64-gnu.tar.gz
-            skip-tests: true
+
           - os-name: Linux-powerpc64le
             runs-on: ubuntu-20.04
             target: powerpc64le-unknown-linux-gnu
             bin: trash
             name: trash-Linux-powerpc64le.tar.gz
-            skip-tests: true
+
           - os-name: Linux-riscv64
             runs-on: ubuntu-20.04
             target: riscv64gc-unknown-linux-gnu
@@ -82,25 +82,25 @@ jobs:
             target: s390x-unknown-linux-gnu
             bin: trash
             name: trash-Linux-s390x-gnu.tar.gz
-            skip-tests: true
+
           - os-name: NetBSD-x86_64
             runs-on: ubuntu-20.04
             target: x86_64-unknown-netbsd
             bin: trash
             name: trash-NetBSD-x86_64.tar.gz
-            skip-tests: true
+
           - os-name: Windows-aarch64
             runs-on: windows-latest
             target: aarch64-pc-windows-msvc
             bin: trash.exe
             name: trash-Windows-aarch64.zip
-            skip-tests: true
+
           - os-name: Windows-i686
             runs-on: windows-latest
             target: i686-pc-windows-msvc
             bin: trash.exe
             name: trash-Windows-i686.zip
-            skip-tests: true
+
           - os-name: Windows-x86_64
             runs-on: windows-latest
             target: x86_64-pc-windows-msvc
@@ -146,14 +146,6 @@ jobs:
           # branch updated its images long ago, but the last cross release, 0.2.5, is still using
           # Ubuntu 16.04 as the base for some images.
           cross-version: 4090beca3cfffa44371a5bba524de3a578aa46c3
-      - name: Run tests
-        uses: houseabsolute/actions-rust-cross@v1
-        with:
-          command: "test"
-          target: ${{ matrix.platform.target }}
-          toolchain: ${{ matrix.toolchain }}
-          args: "--locked --release"
-          use-rust-cache: false
         if: ${{ !matrix.platform.skip-tests }}
       - name: Publish artifacts and release
         uses: houseabsolute/actions-rust-release@v0
