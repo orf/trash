@@ -5,6 +5,7 @@ edition = "2021"
 
 [[bin]]
 name = "trash"
+path = "src/main.rs"
 
 [dependencies]
 anyhow = "1.0.95"
