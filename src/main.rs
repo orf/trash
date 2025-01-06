@@ -15,7 +15,7 @@ fn main() -> anyhow::Result<()> {
 
 #[cfg(not(target_os = "macos"))]
 fn remove(paths: Vec<PathBuf>) -> anyhow::Result<()> {
-    trash::delete_all(args.paths)?;
+    trash::delete_all(paths)?;
     Ok(())
 }
 
