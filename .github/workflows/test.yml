@@ -161,6 +161,13 @@ jobs:
             target/${{ matrix.platform.target }}/release/${{ matrix.platform.bin }}
             target/release/${{ matrix.platform.bin }}
 
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          make_latest: true
+          draft: false
+
       - name: Publish artifacts and release
         uses: houseabsolute/actions-rust-release@v0
         with:
